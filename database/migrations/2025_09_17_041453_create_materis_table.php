@@ -13,13 +13,23 @@ return new class extends Migration
     {
         Schema::create('materis', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('course_id')->constrained('courses')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('judul');
-            $table->string('link_kuis');
-            $table->string('link_diskusi');
-            $table->text('deskripsi')->nullable();
+            $table->string('slug');
+            $table->text('ringkasan')->nullable();
+            $table->longText('deskripsi');
+            $table->string('video_url')->nullable();
+            $table->string('link_kuis')->nullable();
+            $table->string('link_diskusi')->nullable();
             $table->string('thumbnail')->nullable();
+            $table->unsignedInteger('duration_minutes')->default(0);
+            $table->unsignedInteger('position')->default(0);
+            $table->boolean('is_published')->default(false)->index();
+            $table->timestamp('published_at')->nullable();
             $table->timestamps();
+
+            $table->unique(['course_id', 'slug']);
         });
     }
 

@@ -1,39 +1,36 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
+<html lang="id">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>{{ config('app.name', 'Edutechia') }}</title>
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
-    <!-- Scripts -->
+    <title>{{ $title ?? config('app.name', 'Edutechia') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
+<body class="min-h-screen bg-ink text-slate-200">
+    @include('layouts.navigation')
 
-<body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100">
-        @include('layouts.navigation')
+    @isset($header)
+        <header class="border-b border-white/5 bg-white/[0.025]">
+            <div class="shell py-7">{{ $header }}</div>
+        </header>
+    @endisset
 
-        <!-- Page Heading -->
-        @isset($header)
-            <header class="bg-white shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    {{ $header }}
+    <main class="min-h-[calc(100vh-13rem)]">
+        <div class="shell pt-6">
+            @if (session('success'))
+                <div class="mb-6 rounded-xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3 text-sm font-semibold text-emerald-300" role="status">{{ session('success') }}</div>
+            @endif
+            @if ($errors->any())
+                <div class="mb-6 rounded-xl border border-red-400/20 bg-red-400/10 px-4 py-3 text-sm text-red-200" role="alert">
+                    <p class="font-bold">Ada data yang perlu diperbaiki:</p>
+                    <ul class="mt-2 list-disc space-y-1 pl-5">@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
                 </div>
-            </header>
-        @endisset
+            @endif
+        </div>
+        {{ $slot }}
+    </main>
 
-        <!-- Page Content -->
-        <main>
-            {{ $slot }}
-        </main>
-    </div>
+    <footer class="mt-16 border-t border-white/5 py-8 text-center text-sm text-slate-500">© {{ date('Y') }} Edutechia · Belajar, bertumbuh, berkarya.</footer>
 </body>
-
 </html>

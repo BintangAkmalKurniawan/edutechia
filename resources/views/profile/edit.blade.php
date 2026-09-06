@@ -1,29 +1,21 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Profile') }}
-        </h2>
-    </x-slot>
+    <x-slot name="header"><div><p class="eyebrow">Akun & keamanan</p><h1 class="mt-2 text-2xl font-extrabold text-white">Pengaturan profil</h1><p class="mt-1 text-sm text-slate-500">Perbarui identitas, email, dan kata sandi akun Anda.</p></div></x-slot>
+    <div class="shell py-8"><div class="mx-auto max-w-3xl space-y-6">
+        <section class="card p-6 sm:p-8"><div class="flex items-center gap-4 border-b border-white/5 pb-6"><span class="grid h-14 w-14 place-items-center rounded-2xl bg-brand-400 font-display text-xl font-extrabold text-ink">{{ mb_strtoupper(mb_substr($user->name,0,1)) }}</span><div><h2 class="font-bold text-white">Informasi pribadi</h2><p class="mt-1 text-sm capitalize text-slate-500">{{ $user->role }} · {{ $user->status }}</p></div></div>
+            <form method="POST" action="{{ route('profile.update') }}" class="mt-6 space-y-5">@csrf @method('PATCH')
+                <div class="grid gap-5 sm:grid-cols-2"><div><label class="label" for="name">Nama lengkap</label><input class="field" id="name" name="name" value="{{ old('name',$user->name) }}" required></div><div><label class="label" for="institution_id">ID institusi</label><input class="field" id="institution_id" name="institution_id" value="{{ old('institution_id',$user->institution_id) }}"></div></div>
+                <div class="grid gap-5 sm:grid-cols-2"><div><label class="label" for="email">Alamat email</label><input class="field" id="email" type="email" name="email" value="{{ old('email',$user->email) }}" required></div><div><label class="label" for="phone">Nomor telepon</label><input class="field" id="phone" name="phone" value="{{ old('phone',$user->phone) }}"></div></div>
+                <div><label class="label" for="bio">Bio singkat</label><textarea class="field" id="bio" name="bio" rows="4" maxlength="1000" placeholder="Ceritakan sedikit tentang diri Anda...">{{ old('bio',$user->bio) }}</textarea></div>
+                <div class="flex justify-end"><button class="btn-primary" type="submit">Simpan profil</button></div>
+            </form>
+        </section>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-profile-information-form')
-                </div>
-            </div>
+        <section class="card p-6 sm:p-8"><h2 class="font-bold text-white">Ubah kata sandi</h2><p class="mt-1 text-sm text-slate-500">Gunakan kata sandi panjang dan unik.</p><form method="POST" action="{{ route('password.update') }}" class="mt-6 space-y-5">@csrf @method('PUT')
+            <div><label class="label" for="current_password">Kata sandi saat ini</label><input class="field" id="current_password" type="password" name="current_password" autocomplete="current-password">@error('current_password','updatePassword')<p class="mt-2 text-sm text-red-300">{{ $message }}</p>@enderror</div>
+            <div class="grid gap-5 sm:grid-cols-2"><div><label class="label" for="password">Kata sandi baru</label><input class="field" id="password" type="password" name="password" autocomplete="new-password">@error('password','updatePassword')<p class="mt-2 text-sm text-red-300">{{ $message }}</p>@enderror</div><div><label class="label" for="password_confirmation">Ulangi sandi baru</label><input class="field" id="password_confirmation" type="password" name="password_confirmation" autocomplete="new-password"></div></div>
+            <div class="flex justify-end"><button class="btn-secondary" type="submit">Perbarui kata sandi</button></div>
+        </form></section>
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-password-form')
-                </div>
-            </div>
-
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.delete-user-form')
-                </div>
-            </div>
-        </div>
-    </div>
+        @unless($user->isAdmin())<section class="rounded-2xl border border-red-400/20 bg-red-400/5 p-6 sm:p-8"><h2 class="font-bold text-red-300">Hapus akun</h2><p class="mt-2 text-sm leading-6 text-slate-500">Tindakan ini menghapus akun dan data terkait secara permanen. Masukkan kata sandi untuk mengonfirmasi.</p><form method="POST" action="{{ route('profile.destroy') }}" class="mt-5 flex flex-col gap-3 sm:flex-row">@csrf @method('DELETE')<input class="field mt-0 flex-1" type="password" name="password" placeholder="Kata sandi saat ini" required><button class="btn-danger" type="submit" onclick="return confirm('Anda yakin ingin menghapus akun?')">Hapus akun saya</button></form>@error('password','userDeletion')<p class="mt-2 text-sm text-red-300">{{ $message }}</p>@enderror</section>@endunless
+    </div></div>
 </x-app-layout>

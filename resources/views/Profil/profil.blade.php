@@ -1,99 +1,16 @@
-<!DOCTYPE html>
-<html lang="id">
-
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Creator Profile - Edutechia</title>
-    @vite('resources/css/app.css')
-</head>
-
-<body class="m-0 font-sans bg-gradient-to-br from-[#103b61] to-[#000b0c] text-white min-h-screen flex flex-col">
-    <div class="container ml-20 flex-1 px-5 py-10 flex flex-col justify-start items-center text-center">
-        <h1 class="mb-1 text-3xl font-bold"><i>Edutechia Team</i></h1>
-        <p>
-            <a href="mailto:eduniverse.id@gmail.com" class="text-[#ffdd57]">edutechia.id@gmail.com</a>
-        </p>
-        <h3 class="font-normal mb-8">Teknologi Pendidikan – Universitas Pendidikan Indonesia</h3>
-
-        <!-- isi -->
-        <ul class="flex flex-wrap justify-center gap-5 list-none p-0 m-0 mb-8 mx-32">
-            <li
-                class="bg-white/10 rounded-xl p-5 w-64 text-center transition duration-300 break-words hover:bg-white/20 hover:-translate-y-1">
-                <img src="images/creator/agil.jpg" alt="Gilbran Aldebaran"
-                    class="w-full h-72 object-cover rounded-lg mb-2" />
-                <p>Gilbran Aldebaran</p>
-                <p class="text-sm">
-                    gilbranshauma@gmail.com <br />
-                    2300433
-                </p>
-            </li>
-            <li
-                class="bg-white/10 rounded-xl p-5 w-64 text-center transition duration-300 break-words hover:bg-white/20 hover:-translate-y-1">
-                <img src="images/creator/elma.jpg" alt="Elma Mukhsinah"
-                    class="w-full h-72 object-cover rounded-lg mb-2" />
-                <p>Elma Mukhsinah</p>
-                <p class="text-sm">
-                    elmamukhsinah0805@gmail.com <br />
-                    2310711
-                </p>
-            </li>
-            <li
-                class="bg-white/10 rounded-xl p-5 w-64 text-center transition duration-300 break-words hover:bg-white/20 hover:-translate-y-1">
-                <img src="images/creator/yasmin.jpg" alt="Elma Mukhsinah"
-                    class="w-full h-72 object-cover rounded-lg mb-2" />
-                <p>Yasmin Hadiyya Fatin Hana
-                </p>
-                <p class="text-sm">
-                    yasminhadiyya@gmail.com
-                    <br />
-                    2300730
-                </p>
-            </li>
-            <li
-                class="bg-white/10 rounded-xl p-5 w-64 text-center transition duration-300 break-words hover:bg-white/20 hover:-translate-y-1">
-                <img src="images/creator/illiyyine.jpg" alt="Elma Mukhsinah"
-                    class="w-full h-72 object-cover rounded-lg mb-2" />
-                <p>Illiyyine Zulkarnaen
-                </p>
-                <p class="text-sm">
-                    illiyyinezill@gmail.com
-                    <br />
-                    2304179
-                </p>
-            </li>
-            <li
-                class="bg-white/10 rounded-xl p-5 w-64 text-center transition duration-300 break-words hover:bg-white/20 hover:-translate-y-1">
-                <img src="images/creator/rafa.jpg" alt="Elma Mukhsinah"
-                    class="w-full h-72 object-cover rounded-lg mb-2" />
-                <p>Rafa Anindita Azzahra</p>
-                <p class="text-sm">
-                    rafaaninditazazhraa@gmail.com
-                    <br />
-                    2300188
-                </p>
-            </li>
-            <li
-                class="bg-white/10 rounded-xl p-5 w-64 text-center transition duration-300 break-words hover:bg-white/20 hover:-translate-y-1">
-                <img src="images/creator/gisca.jpg" alt="Elma Mukhsinah"
-                    class="w-full h-72 object-cover rounded-lg mb-2" />
-                <p>Gisca Anugrah Yuhendra
-                </p>
-                <p class="text-sm">
-                    giscaanugrah@gmail.com
-                    <br />
-                    2305235
-                </p>
-            </li>
-        </ul>
-
-        <a href="/"
-            class="inline-block px-6 py-3 bg-[#ffdd57] text-black rounded-lg font-bold no-underline transition duration-300 hover:bg-white hover:scale-105">Kembali</a>
-    </div>
-
-    <footer class="text-center p-4 text-sm bg-white/5">
-        &copy; {{ date('Y') }} Edutechia. All Rights Reserved.
-    </footer>
-</body>
-
-</html>
+@extends('layouts.public')
+@section('title', 'Tim Kreator — Edutechia')
+@section('content')
+@php($members = [
+    ['name'=>'Gilbran Aldebaran','email'=>'gilbranshauma@gmail.com','nim'=>'2300433','image'=>'agil.jpg'],
+    ['name'=>'Elma Mukhsinah','email'=>'elmamukhsinah0805@gmail.com','nim'=>'2310711','image'=>'elma.jpg'],
+    ['name'=>'Yasmin Hadiyya Fatin Hana','email'=>'yasminhadiyya@gmail.com','nim'=>'2300730','image'=>'yasmin.jpg'],
+    ['name'=>'Illiyyine Zulkarnaen','email'=>'illiyyinezill@gmail.com','nim'=>'2304179','image'=>'illiyyine.jpg'],
+    ['name'=>'Rafa Anindita Azzahra','email'=>'rafaaninditazazhraa@gmail.com','nim'=>'2300188','image'=>'rafa.jpg'],
+    ['name'=>'Gisca Anugrah Yuhendra','email'=>'giscaanugrah@gmail.com','nim'=>'2305235','image'=>'gisca.jpg'],
+])
+<main>
+    <section class="border-b border-white/5 bg-white/[0.02]"><div class="shell py-16 text-center sm:py-20"><p class="eyebrow">Di balik Edutechia</p><h1 class="heading mt-3">Dibangun oleh pembelajar, untuk pembelajar.</h1><p class="mx-auto mt-5 max-w-2xl leading-7 text-slate-400">Tim Teknologi Pendidikan Universitas Pendidikan Indonesia yang percaya bahwa teknologi seharusnya membuat belajar terasa lebih dekat.</p><a href="mailto:edutechia.id@gmail.com" class="mt-5 inline-block font-bold text-brand-400">edutechia.id@gmail.com</a></div></section>
+    <section class="shell py-16"><div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">@foreach($members as $member)<article class="card group overflow-hidden p-3"><div class="aspect-[4/4.5] overflow-hidden rounded-xl bg-slate-800"><img src="{{ asset('images/creator/'.$member['image']) }}" alt="{{ $member['name'] }}" class="h-full w-full object-cover transition duration-500 group-hover:scale-105"></div><div class="p-4"><h2 class="text-lg font-extrabold text-white">{{ $member['name'] }}</h2><p class="mt-1 text-sm text-brand-400">{{ $member['nim'] }}</p><a class="mt-3 block truncate text-xs text-slate-500 hover:text-white" href="mailto:{{ $member['email'] }}">{{ $member['email'] }}</a></div></article>@endforeach</div></section>
+</main>
+@endsection

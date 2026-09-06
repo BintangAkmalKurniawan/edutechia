@@ -1,6 +1,19 @@
 <?php
 
+use App\Models\User;
+
 return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | One-time password lifetime
+    |--------------------------------------------------------------------------
+    |
+    | OTP is used only to verify a newly registered account.
+    |
+    */
+
+    'otp_expiration' => (int) env('AUTH_OTP_EXPIRATION', 10),
 
     /*
     |--------------------------------------------------------------------------
@@ -62,7 +75,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => env('AUTH_MODEL', User::class),
         ],
 
         // 'users' => [

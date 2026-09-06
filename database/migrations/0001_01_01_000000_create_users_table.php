@@ -15,7 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('role', 20)->default('student')->index();
+            $table->string('status', 20)->default('active')->index();
+            $table->string('phone', 30)->nullable();
+            $table->string('institution_id', 80)->nullable();
+            $table->text('bio')->nullable();
+            $table->string('avatar')->nullable();
             $table->timestamp('email_verified_at')->nullable();
+            $table->timestamp('last_login_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

@@ -1,3 +1,40 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+[x-cloak] { display: none !important; }
+
+@layer base {
+    html { scroll-behavior: smooth; }
+    body { @apply bg-ink text-slate-200 antialiased; }
+    ::selection { @apply bg-brand-400 text-ink; }
+}
+
+@layer components {
+    .shell { @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8; }
+    .eyebrow { @apply text-xs font-bold uppercase tracking-[0.22em] text-brand-400; }
+    .heading { @apply font-display text-3xl font-extrabold tracking-tight text-white sm:text-4xl; }
+    .card { @apply rounded-2xl border border-white/10 bg-panel shadow-xl shadow-black/10; }
+    .glass { @apply border border-white/10 bg-white/[0.055] backdrop-blur-xl; }
+    .btn-primary { @apply inline-flex items-center justify-center rounded-xl bg-brand-400 px-5 py-3 text-sm font-extrabold text-ink shadow-lg shadow-brand-500/10 transition hover:-translate-y-0.5 hover:bg-brand-300 focus:outline-none focus:ring-2 focus:ring-brand-300 focus:ring-offset-2 focus:ring-offset-ink; }
+    .btn-secondary { @apply inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-bold text-white transition hover:border-brand-400/50 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-offset-2 focus:ring-offset-ink; }
+    .btn-danger { @apply inline-flex items-center justify-center rounded-xl border border-red-400/25 bg-red-400/10 px-4 py-2 text-sm font-bold text-red-300 transition hover:bg-red-400/20; }
+    .field { @apply mt-2 block w-full rounded-xl border-white/10 bg-white/[0.06] px-4 py-3 text-white placeholder:text-slate-500 focus:border-brand-400 focus:ring-brand-400; }
+    .label { @apply text-sm font-semibold text-slate-200; }
+    .badge { @apply inline-flex items-center rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs font-bold text-slate-300; }
+    .nav-link { @apply rounded-lg px-3 py-2 text-sm font-semibold text-slate-300 transition hover:bg-white/[0.06] hover:text-white; }
+    .nav-link-active { @apply bg-brand-400/10 text-brand-300; }
+}
+
+.hero-grid {
+    background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: linear-gradient(to bottom, black 35%, transparent 100%);
+}
+
+.content-body h2 { @apply mb-3 mt-8 text-2xl font-bold text-white; }
+.content-body h3 { @apply mb-2 mt-6 text-xl font-bold text-white; }
+.content-body p { @apply mb-4 leading-8 text-slate-300; }
+.content-body ul { @apply mb-4 list-disc space-y-2 pl-6 text-slate-300; }
+.content-body ol { @apply mb-4 list-decimal space-y-2 pl-6 text-slate-300; }
+.content-body a { @apply text-brand-400 underline decoration-brand-400/40 underline-offset-4; }
