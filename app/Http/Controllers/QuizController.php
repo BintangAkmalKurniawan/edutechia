@@ -21,7 +21,7 @@ class QuizController extends Controller
         $access->authorizeAccess($request->user(), $materi->course);
         $canManage = $access->canManage($request->user(), $materi->course);
 
-        if ($materi->quiz && ! $materi->quiz->is_published && ! $canManage) {
+        if (!$materi->quiz && ! $materi->quiz->is_published && ! $canManage) {
             abort(404);
         }
 

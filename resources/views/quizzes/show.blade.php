@@ -1,5 +1,8 @@
 <x-app-layout>
-    <x-slot name="header"><div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"><div><a href="{{ route('materi.show',$materi) }}" class="text-sm font-bold text-brand-400">← Kembali ke materi</a><h1 class="mt-2 text-2xl font-extrabold text-white">{{ $materi->quiz?->title ?? 'Kuis: '.$materi->judul }}</h1></div>@if($canManage)<a href="{{ route('quiz.edit',$materi) }}" class="btn-primary">Kelola kuis</a>@endif</div></x-slot>
+    <x-slot name="header"><div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"><div><a href="{{ route('materi.show',$materi) }}" class="text-sm font-bold text-brand-400">← Kembali ke materi</a>
+    <h1 class="mt-2 text-2xl font-extrabold text-white">{{ $materi->quiz?->title ?? 'Kuis: '.$materi->judul }}</h1>
+        </div>@if($canManage)<a href="{{ route('quiz.edit',$materi) }}" class="btn-primary">Kelola kuis</a>@endif</div>
+    </x-slot>
     <div class="shell py-8">
         @if(!$materi->quiz || $materi->quiz->questions->isEmpty())
             <div class="card mx-auto max-w-5xl p-6 sm:p-10"><div class="text-center"><span class="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-brand-400/10 text-2xl text-brand-400">?</span><h2 class="mt-5 text-xl font-bold text-white">Kuis internal belum tersedia</h2><p class="mt-2 text-sm leading-6 text-slate-500">{{ $materi->link_kuis ? 'Guru menyediakan kuis eksternal untuk materi ini.' : 'Guru belum menambahkan latihan untuk materi ini.' }}</p></div>@if($materi->link_kuis)@if(Str::contains($materi->link_kuis,'wordwall.net'))<div class="mt-7 aspect-video overflow-hidden rounded-xl border border-white/10 bg-black"><iframe src="{{ $materi->link_kuis }}" class="h-full w-full" allowfullscreen title="Kuis eksternal"></iframe></div>@endif<div class="text-center"><a href="{{ $materi->link_kuis }}" target="_blank" class="btn-primary mt-6">Buka kuis di tab baru ↗</a></div>@endif</div>
