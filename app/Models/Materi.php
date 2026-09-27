@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,8 +9,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Materi extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'user_id',
         'course_id',
@@ -22,8 +19,6 @@ class Materi extends Model
         'link_diskusi',
         'deskripsi',
         'video_url',
-        'thumbnail',
-        'duration_minutes',
         'position',
         'is_published',
         'published_at',

@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -18,8 +15,7 @@ class User extends Authenticatable
 
     public const ROLE_STUDENT = 'student';
 
-    /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.

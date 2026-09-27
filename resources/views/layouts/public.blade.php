@@ -62,5 +62,6 @@
             <p>© {{ date('Y') }} Edutechia.</p>
         </div>
     </footer>
+    @include('layouts.alerts')
 </body>
 </html>

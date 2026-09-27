@@ -12,7 +12,15 @@ class QuizAttempt extends Model
 
     protected function casts(): array
     {
-        return ['started_at' => 'datetime', 'submitted_at' => 'datetime'];
+        return [
+            'quiz_id' => 'integer',
+            'student_id' => 'integer',
+            'score' => 'integer',
+            'earned_points' => 'integer',
+            'total_points' => 'integer',
+            'started_at' => 'datetime',
+            'submitted_at' => 'datetime',
+        ];
     }
 
     public function quiz(): BelongsTo

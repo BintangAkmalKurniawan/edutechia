@@ -22,8 +22,6 @@ return new class extends Migration
             $table->string('video_url')->nullable();
             $table->string('link_kuis')->nullable();
             $table->string('link_diskusi')->nullable();
-            $table->string('thumbnail')->nullable();
-            $table->unsignedInteger('duration_minutes')->default(0);
             $table->unsignedInteger('position')->default(0);
             $table->boolean('is_published')->default(false)->index();
             $table->timestamp('published_at')->nullable();

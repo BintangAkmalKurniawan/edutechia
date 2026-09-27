@@ -1,15 +1,10 @@
 <?php
 
 use App\Models\User;
-use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
-
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote');
 
 Artisan::command('edutechia:create-admin {--name=} {--email=}', function () {
     $name = $this->option('name') ?: $this->ask('Nama administrator');

@@ -15,21 +15,46 @@ use Illuminate\View\View;
 
 class QuizController extends Controller
 {
-    public function show(Request $request, Materi $materi, CourseAccessService $access): View
+    public function show(Request $request, Materi $materi, CourseAccessService $access): View|RedirectResponse
     {
         $materi->load(['course', 'quiz.questions.options']);
         $access->authorizeAccess($request->user(), $materi->course);
         $canManage = $access->canManage($request->user(), $materi->course);
+        $quiz = $materi->quiz;
 
-        if (!$materi->quiz && ! $materi->quiz->is_published && ! $canManage) {
-            abort(404);
+        if ($quiz && ! $quiz->is_published && ! $canManage) {
+            return redirect()->route('materi.show', $materi)
+                ->withErrors(['quiz' => 'Kuis ini belum diterbitkan oleh guru.']);
         }
 
-        $attempts = $materi->quiz && $request->user()->isStudent()
-            ? $materi->quiz->attempts()->where('student_id', $request->user()->id)->latest()->get()
-            : collect();
+        $activeAttempt = null;
+        $attempts = collect();
 
-        return view('quizzes.show', compact('materi', 'attempts', 'canManage'));
+        if ($quiz && $request->user()->isStudent()) {
+            $attempts = $quiz->attempts()
+                ->where('student_id', $request->user()->id)
+                ->whereNotNull('submitted_at')
+                ->latest('submitted_at')
+                ->get();
+
+            if ($quiz->duration_minutes && $quiz->questions->isNotEmpty()) {
+                $activeAttempt = $quiz->attempts()
+                    ->where('student_id', $request->user()->id)
+                    ->whereNull('submitted_at')
+                    ->latest('started_at')
+                    ->first();
+
+                if (! $activeAttempt) {
+                    $activeAttempt = $quiz->attempts()->create([
+                        'student_id' => $request->user()->id,
+                        'started_at' => now(),
+                        'total_points' => $quiz->questions->sum('points'),
+                    ]);
+                }
+            }
+        }
+
+        return view('quizzes.show', compact('materi', 'attempts', 'activeAttempt', 'canManage'));
     }
 
     public function submit(Request $request, Materi $materi, CourseAccessService $access): RedirectResponse
@@ -38,14 +63,57 @@ class QuizController extends Controller
         $materi->load(['course', 'quiz.questions.options']);
         $access->authorizeAccess($request->user(), $materi->course);
         $quiz = $materi->quiz;
-        abort_unless($quiz && $quiz->is_published, 404);
 
-        $answers = $request->validate(['answers' => ['required', 'array']])['answers'];
+        if (! $quiz || ! $quiz->is_published) {
+            return redirect()->route('materi.show', $materi)
+                ->withErrors(['quiz' => 'Kuis belum tersedia atau belum diterbitkan oleh guru.']);
+        }
 
-        $attempt = DB::transaction(function () use ($answers, $quiz, $request) {
+        $validated = $request->validate([
+            'answers' => ['sometimes', 'array'],
+            'answers.*' => ['required', 'integer'],
+            'attempt_id' => ['nullable', 'integer'],
+            'auto_submitted' => ['nullable', 'boolean'],
+        ]);
+
+        $answers = $validated['answers'] ?? [];
+        $autoSubmitted = $request->boolean('auto_submitted');
+
+        if (! $autoSubmitted) {
+            foreach ($quiz->questions as $question) {
+                if (! array_key_exists($question->id, $answers)) {
+                    throw ValidationException::withMessages([
+                        'answers' => 'Semua pertanyaan harus dijawab sebelum jawaban dikirim.',
+                    ]);
+                }
+            }
+        }
+
+        $attempt = DB::transaction(function () use ($answers, $quiz, $request, $validated) {
             $totalPoints = $quiz->questions->sum('points');
             $earnedPoints = 0;
-            $attempt = QuizAttempt::create([
+            $attempt = null;
+
+            if (! empty($validated['attempt_id'])) {
+                $attempt = QuizAttempt::query()
+                    ->whereKey($validated['attempt_id'])
+                    ->where('quiz_id', $quiz->id)
+                    ->where('student_id', $request->user()->id)
+                    ->lockForUpdate()
+                    ->first();
+
+                if (! $attempt) {
+                    throw ValidationException::withMessages([
+                        'attempt_id' => 'Percobaan kuis tidak valid. Silakan muat ulang halaman kuis.',
+                    ]);
+                }
+
+                if ($attempt->submitted_at) {
+                    return $attempt;
+                }
+            }
+
+            $attempt ??= QuizAttempt::create([
                 'quiz_id' => $quiz->id,
                 'student_id' => $request->user()->id,
                 'started_at' => now(),
@@ -70,6 +138,7 @@ class QuizController extends Controller
 
             $attempt->update([
                 'earned_points' => $earnedPoints,
+                'total_points' => $totalPoints,
                 'score' => $totalPoints > 0 ? (int) round(($earnedPoints / $totalPoints) * 100) : 0,
                 'submitted_at' => now(),
             ]);
@@ -77,14 +146,17 @@ class QuizController extends Controller
             return $attempt;
         });
 
-        return redirect()->route('quiz.result', [$materi, $attempt]);
+        return redirect()->route('quiz.result', [
+            'materi' => $materi,
+            'attempt' => $attempt,
+        ]);
     }
 
     public function result(Request $request, Materi $materi, QuizAttempt $attempt, CourseAccessService $access): View
     {
         $materi->load(['course', 'quiz.questions.options']);
         $access->authorizeAccess($request->user(), $materi->course);
-        abort_unless($attempt->quiz_id === $materi->quiz?->id, 404);
+        abort_unless($attempt->quiz_id === $materi->quiz?->getKey(), 404);
         abort_unless($access->canManage($request->user(), $materi->course) || $attempt->student_id === $request->user()->id, 403);
         $attempt->load('answers');
 

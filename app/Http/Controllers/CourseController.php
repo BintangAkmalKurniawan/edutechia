@@ -160,9 +160,6 @@ class CourseController extends Controller
             Storage::disk('public')->delete($course->thumbnail);
         }
         foreach ($course->materis as $materi) {
-            if ($materi->thumbnail) {
-                Storage::disk('public')->delete($materi->thumbnail);
-            }
             $materi->files->each(fn ($file) => Storage::disk('public')->delete($file->file_path));
             $materi->videos->each(fn ($video) => Storage::disk('public')->delete($video->video_path));
         }

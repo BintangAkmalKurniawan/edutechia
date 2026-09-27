@@ -17,20 +17,10 @@
     @endisset
 
     <main class="min-h-[calc(100vh-13rem)]">
-        <div class="shell pt-6">
-            @if (session('success'))
-                <div class="mb-6 rounded-xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3 text-sm font-semibold text-emerald-300" role="status">{{ session('success') }}</div>
-            @endif
-            @if ($errors->any())
-                <div class="mb-6 rounded-xl border border-red-400/20 bg-red-400/10 px-4 py-3 text-sm text-red-200" role="alert">
-                    <p class="font-bold">Ada data yang perlu diperbaiki:</p>
-                    <ul class="mt-2 list-disc space-y-1 pl-5">@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
-                </div>
-            @endif
-        </div>
         {{ $slot }}
     </main>
 
     <footer class="mt-16 border-t border-white/5 py-8 text-center text-sm text-slate-500">© {{ date('Y') }} Edutechia · Belajar, bertumbuh, berkarya.</footer>
+    @include('layouts.alerts')
 </body>
 </html>

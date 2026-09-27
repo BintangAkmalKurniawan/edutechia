@@ -106,16 +106,9 @@ Lakukan uji kirim pada staging sebelum produksi. Jangan menyimpan password SMTP 
 | Baca materi, catat progres, kerjakan kuis | Pratinjau | Pratinjau | ✓ |
 | Forum diskusi | Moderasi | Moderasi kelas sendiri | Berpartisipasi |
 
-## Pengujian
-
-Test memakai SQLite in-memory agar cepat dan tidak menyentuh database pengembangan, sedangkan konfigurasi runtime tetap PostgreSQL.
+## Verifikasi aplikasi
 
 ```powershell
-php artisan test
 npm run build
 npm audit
 ```
-
-## Keputusan produk yang ditunda
-
-Fitur yang perlu keputusan sebelum diimplementasikan dicatat di [docs/KEPUTUSAN-FITUR.md](docs/KEPUTUSAN-FITUR.md). Daftar itu sengaja tidak diasumsikan agar alur admin, guru, dan siswa tidak berkembang ke arah yang berbeda dari kebutuhan institusi.

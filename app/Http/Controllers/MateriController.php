@@ -38,10 +38,6 @@ class MateriController extends Controller
             $data['is_published'] = $request->boolean('is_published');
             $data['published_at'] = $data['is_published'] ? now() : null;
 
-            if ($request->hasFile('thumbnail')) {
-                $data['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
-            }
-
             $materi = Materi::create($data);
             $this->storeAttachments($request, $materi);
 
@@ -91,13 +87,6 @@ class MateriController extends Controller
         $validated['is_published'] = $request->boolean('is_published');
         $validated['published_at'] = $validated['is_published'] ? ($materi->published_at ?? now()) : null;
 
-        if ($request->hasFile('thumbnail')) {
-            if ($materi->thumbnail) {
-                Storage::disk('public')->delete($materi->thumbnail);
-            }
-            $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
-        }
-
         DB::transaction(function () use ($request, $materi, $validated): void {
             $materi->update($validated);
             $this->storeAttachments($request, $materi);
@@ -112,7 +101,6 @@ class MateriController extends Controller
         $access->authorizeManage($request->user(), $materi->course);
         $course = $materi->course;
 
-        collect([$materi->thumbnail])->filter()->each(fn ($path) => Storage::disk('public')->delete($path));
         $materi->files->each(fn ($file) => Storage::disk('public')->delete($file->file_path));
         $materi->videos->each(fn ($video) => Storage::disk('public')->delete($video->video_path));
         $materi->delete();
@@ -129,9 +117,7 @@ class MateriController extends Controller
             'video_url' => ['nullable', 'url', 'max:2048'],
             'link_diskusi' => ['nullable', 'url', 'max:2048'],
             'link_kuis' => ['nullable', 'url', 'max:2048'],
-            'duration_minutes' => ['nullable', 'integer', 'min:0', 'max:1440'],
             'is_published' => ['nullable', 'boolean'],
-            'thumbnail' => ['nullable', 'image', 'max:3072'],
             'files.*' => ['nullable', 'file', 'mimes:pdf,doc,docx,ppt,pptx,xls,xlsx,zip', 'max:15360'],
             'videos.*' => ['nullable', 'file', 'mimes:mp4,mov,ogg,webm', 'max:512000'],
         ]);
